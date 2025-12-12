@@ -17,6 +17,14 @@
             <p>someting here</p>
         </div>
     </section>
+    
+    <section class="dinner-plans">
+        <img src="" alt="dinner-img">
+    </section>
+    
+    <section class="activities">
+        <img src="" alt="activities">
+    </section>
 
 
 

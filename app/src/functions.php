@@ -3,16 +3,12 @@ declare(strict_types=1);
 
 function getRoomAvailability(\PDO $pdo, int $roomId): array
 {
-    // Assume $pdo is your global PDO connection object or retrieved via a function
-    // global $pdo; 
-    
-    // 1. Fetch the room name
+    // Fetch the room name
     $stmtRoom = $pdo->prepare("SELECT name FROM rooms WHERE id = :id");
     $stmtRoom->bindParam(':id', $roomId, PDO::PARAM_INT);
     $stmtRoom->execute();
-    // $roomName = $stmtRoom->fetchColumn() ?: 'Unknown Room';
 
-    // 2. Fetch all bookings for the room in January 2026
+    // Fetch all bookings for the room in January 2026
     $sql = "SELECT arrival_date, departure_date FROM bookings 
             WHERE room_id = :room_id 
             AND arrival_date BETWEEN '2026-01-01' AND '2026-01-31'
@@ -25,7 +21,7 @@ function getRoomAvailability(\PDO $pdo, int $roomId): array
 
     $bookedDates = [];
     
-    // 3. Populate the array of booked day numbers (1 to 31)
+    // Populate the array of booked day numbers (1 to 31)
     foreach ($bookings as $booking) {
         $arrival = new DateTime($booking['arrival_date']);
         $departure = new DateTime($booking['departure_date']);
@@ -44,7 +40,6 @@ function getRoomAvailability(\PDO $pdo, int $roomId): array
     }
     
     return [
-        // 'room_name' => $roomName,
         'booked_dates' => array_unique($bookedDates)
     ];
 }

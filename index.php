@@ -1,15 +1,9 @@
 <?php 
 require (__DIR__ . '/vendor/autoload.php');
 require (__DIR__ . '/app/src/autoload.php');
-global $database;
-// require_once (__DIR__ . '/app/src/functions.php');
 require (__DIR__ . '/views/header.php'); 
-
-
-
-
-
-
+global $database;
+$availabilityInfo = '<Booked days are marked in gold.';
 
 ?>
 
@@ -17,22 +11,22 @@ require (__DIR__ . '/views/header.php');
         <div class="room">
             <h3>Budget</h3>
             <p>The Cave</p>
-            <img src="https://www.ilmondo.com.au/wp-content/uploads/2023/08/il-mondo-kangaroo-point-accommodation-budget-room-bed.jpg" alt="budget-room">
+            <img src="/assets/images/hotel-images/rooms/room_ budget.png" alt="budget-room">
             <?php $roomId = 1; // Budget Room
             include 'views/calendar.php'; ?>
-            <button>add activities +</button>
+            <p class="availability-info"><?php $availabilityInfo ?></p>
         </div>
         <div class="room">
             <h3>Standard</h3>
             <p>The Bungalow</p>
-            <img src="https://r.profitroom.com/premierhotelthewinkler/images/rooms/0911e3f7-cdfd-4964-8888-2cc66d03f35e.jpg" alt="standard-room">
+            <img src="/assets/images/hotel-images/rooms/room_standard.png" alt="standard-room">
             <?php $roomId = 2; // Standard Room
             include 'views/calendar.php'; ?>
         </div>
         <div class="room">
-            <h3>Luxery</h3>
+            <h3>Luxury</h3>
             <p>The Volcano Suite</p>
-            <img src="https://media.architecturaldigest.com/photos/659d9cb42446c7171718ecf0/master/w_1600%2Cc_limit/atr.royalmansion-bedroom2-mr.jpg" alt="luxery-room">
+            <img src="/assets/images/hotel-images/rooms/room_ luxury.png" alt="luxery-room">
             <?php $roomId = 3; // Luxury Room
             include 'views/calendar.php'; ?>
         </div>

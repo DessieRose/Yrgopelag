@@ -17,12 +17,21 @@
         font-family: "Inter", sans-serif;
     }
 
+    /* header {
+        background-image: url(/assets/images/hotel-images/hero-image_2.png);
+    } */
+
     section {
         margin: 1rem 0;
     }
 
     nav {
         background-color: var(--nav-color);
+        /* background-image: url(/assets/images/hotel-images/hero-image_2.png); */
+        position: sticky;
+        top: 0;
+        overflow: hidden;
+        background-size: cover;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -41,7 +50,8 @@
     }
 
     .logo {
-        height: 5vw;
+        height: 50px;
+        align-self: center;
     }
 
     .hotelname {
@@ -57,7 +67,7 @@
     
     .hero-img img {
         width: 100%;
-        height: 20vh; 
+        height: 40vh; 
         object-fit: cover;
     }
 
@@ -67,8 +77,9 @@
     }
 
     .rooms img {
-        height: 20vh; 
+        height: 25vh;
         object-fit: cover;
+        border-radius: 1rem;
     }
 
     .dinner-plans img {

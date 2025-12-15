@@ -23,6 +23,9 @@
         </nav>
     </header>
     <div class="hero-img">
-        <div class="stars" id="stars">stars</div>
         <img src="" alt="hero-img">
+        <div class="stars" id="stars">
+            <?php $stars = (int)$settings['stars'];
+            echo str_repeat('★', $stars); ?>
+        </div>
     </div>

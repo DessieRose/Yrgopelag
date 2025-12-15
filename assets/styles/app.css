@@ -1,6 +1,13 @@
    * {
         margin: 0;
+        padding: 0;
         box-sizing: border-box;
+    }
+
+    :root {
+        --bg-color: #2E386B;
+        --light-blue: #80AEFF;
+        --nav-color: #475082;
     }
 
     body {
@@ -10,49 +17,35 @@
         font-family: "Inter", sans-serif;
     }
 
-    .home {
-        justify-content: left;
+    section {
+        margin: 1rem 0;
     }
 
-    .nav_right {
-        list-style-type: none;
-        height: 56px;
-        margin: 0;
-        padding: 0 1.2em 0 0;
-        background-color: #1C3A57;
+    nav {
+        background-color: var(--nav-color);
         display: flex;
-        justify-content: right;
+        justify-content: space-between;
+        align-items: center;
     }
 
-    ul li a {
+    nav ul {
+        display: flex;
+    }
+
+    ul, li, a {
         display: block;
         color: white;
-        padding: 18px;
+        padding: 1rem;
         text-decoration: none;
+        list-style-type: none;
     }
 
-    ul li a:hover {
-        background-color:rgb(18, 37, 55);
-        height: 100%;
+    .logo {
+        height: 5vw;
     }
 
-    .search_bar {
-        border-radius: 20px;
-        padding: 0.5em;
-        margin: 0.8em;
-        width: 15rem;
-        border: 2px solid rgb(18, 37, 55);
-    }
-
-    .header_img {
-        position: relative;
-    }
-
-    .img_faded {
-        opacity: 0.7;
-        object-fit: cover;
-        max-width: 100%;
-        height: 900px;
+    .hotelname {
+        font-size: 1.5rem;
     }
 
     h1 {
@@ -61,12 +54,59 @@
     
 
     }
+    
+    .hero-img img {
+        width: 100%;
+        height: 20vh; 
+        object-fit: cover;
+    }
+
+    .rooms {
+        display: flex;
+        justify-content: space-evenly;
+    }
+
+    .rooms img {
+        height: 20vh; 
+        object-fit: cover;
+    }
+
+    .dinner-plans img {
+        width: 100%;
+        height: 40vh; 
+        object-fit: cover;
+    }
+
+    .activities img {
+        width: 100%;
+        height: 40vh; 
+        object-fit: cover;
+    }
+
+    .dinner-plans, .activities {
+        position: relative;
+        text-align: center;
+    }
+
+    .text-float {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        font-size: 3rem;
+        text-shadow: 0px 0px 6px black;
+    }
 
     footer {
-        background-color: #1C3A57;
+        /* position: fixed; */
+        background-color: var(--nav-color);
         width: 100%;
-        height: 12em;
+        /* height: 12em; */
         color: white;
+        left: 0;
+        bottom: 0;
+        width: 100%;
     }
 
     .footer_right {

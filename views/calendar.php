@@ -1,51 +1,48 @@
 <?php
-require __DIR__ . '/autoloade.php';
+
+// Fetch availability data
+$availability = getRoomAvailability($database, $roomId); 
+// $roomName = $availability['room_name'];
+$bookedDays = $availability['booked_dates'];
+
+// Ensure room ID is available to JavaScript
 ?>
 
-<!-- <label for="arrival">Arrival:</label>
-<input type="date" id="arrival" name="arrival" 
-       min="2026-01-01" max="2026-01-31">
+<div class="room-calendar" data-room-id="<?= $roomId; ?>">
+    <h3>Availability - January 2026</h3>
 
-<label for="departure">Departure:</label>
-<input type="date" id="departure" name="departure" 
-       min="2026-01-01" max="2026-01-31"> -->
+    <div class="selected-dates-info">
+        <span class="check-in-display">Check-in: --</span> | 
+        <span class="check-out-display">Check-out: --</span>
+    </div>
 
-<?php
+    <section class="calendar">
+        <div class="day empty"></div>
+        <div class="day empty"></div>
+        <div class="day empty"></div>
 
-$year = 2026;
-$month = 1;
+        <?php for ($day = 1; $day <= 31; $day++):
+            $isBooked = in_array($day, $bookedDays);
+            $isWeekend = isWeekend($day);
+            
+            $classes = "day";
+            if ($isBooked) {
+                $classes .= " booked";
+            }
+            if ($isWeekend) {
+                $classes .= " weekend";
+            }
+            // Add data attributes for JS to read
+            $dataAttributes = "data-day='2026-01-{$day}'"; 
+            if ($isBooked) {
+                $dataAttributes .= " data-booked='true'";
+            }
+            ?>
+            
+            <div class="<?= $classes; ?>" <?= $dataAttributes; ?>>
+                <?= $day; ?>
+            </div>
+        <?php endfor; ?>
+    </section>
+</div>
 
-// Fetch bookings overlapping January 2026
-$statment = $pdo->prepare("
-  SELECT arrival_date, departure_date
-  FROM bookings
-  WHERE arrival_date < :monthEnd
-    AND departure_date > :monthStart
-");
-
-$statment->execute([
-  ':monthStart' => '2026-01-01',
-  ':monthEnd'   => '2026-02-01',
-]);
-
-$bookings = $statment->fetchAll();
-
-// Build set of blocked dates
-$blockedDates = [];
-
-foreach ($bookings as $booking) {
-    $start = new DateTime($booking['arrival_date']);
-    $end = new DateTime($booking['departure_date']);
-
-    // Checkout day is NOT blocked
-    $end->modify('-1 day');
-
-    while ($start <= $end) {
-        $blockedDates[$start->format('Y-m-d')] = true;
-        $start->modify('+1 day');
-    }
-}
-
-$firstDay = new DateTime('2026-01-01');
-$daysInMonth = (int)$firstDay->format('t');
-$startWeekday = (int)$firstDay->format('N'); // 1 (Mon) - 7 (Sun)

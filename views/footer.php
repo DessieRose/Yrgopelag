@@ -4,6 +4,10 @@
             <li><a href="">Features</a></li>
             <li><a href="">Login</a></li>
         </ul>
+        <ul>
+            <img class="logo" src="/assets/images/logo.png" alt="logo">
+            <li class="hotelname">The Semicolon Sanctuary</li>
+        </ul>
 
 
     </footer>

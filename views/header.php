@@ -4,28 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/assets/styles/app.css">
+    <link rel="stylesheet" href="/assets/styles/calendar.css">
+    <link rel="icon" href="/assets/images/favicon_64.png">
     <title>Yrgopelag</title>
 </head>
 <body>
     <header>
-        <nav class="nav-left">
-            <ul>
-                <li><img src="" alt="logo"></li>
-            </ul>
-        </nav>
         <nav>
-            <ul class="nav-right">
-                <li><a href="">Packadges</a></li>
+            <ul>
+                <img class="logo" src="/assets/images/logo.png" alt="logo">
+                <li class="hotelname">The Semicolon Sanctuary</li>
+            </ul>
+            <ul>
+            <li>
+                <a href="">Packadges</a></li>
                 <li><a href="">Features</a></li>
                 <li><a href="">Login</a></li>
             </ul>
         </nav>
+        <!-- <nav class="nav-right">
+            <ul>
+                
+            </ul>
+        </nav> -->
     </header>
     <div class="hero-img">
-        <img src="" alt="hero-img">
-        <div class="stars" id="stars">
-            <?php $stars = (int)$settings['stars'];
-            echo str_repeat('★', $stars); ?>
-        </div>
+        <img src="https://www.eroshotel.it/images/eolie/vulcano/gallery-vulcano-02.jpg" alt="hero-img">
     </div>

@@ -1,4 +1,4 @@
-.calendar {
+/* .calendar {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 6px;
@@ -23,4 +23,77 @@
 .calendar .booked {
     background: #f7c5c5;
     color: #900;
+} */
+
+.calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    max-width: 280px;
+    margin: 1rem auto;
+    font-family: system-ui, sans-serif;
+  }
+  
+  .day {
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f4f4f4;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    font-size: 0.9rem;
+    transition: background 0.2s, transform 0.1s;
+  }
+  
+  .day:hover {
+    background: #eaeaea;
+    transform: scale(1.05);
+  }
+  
+  /* Weekends */
+  .weekend {
+    background: #fbe9e7;
+    color: #b71c1c;
+    font-weight: 500;
+  }
+  
+  /* Booked dates */
+  .booked {
+    background: #bd9321;
+    border-color: #7b4002;
+    color: #b26229;
+    font-weight: 600;
+  }
+  
+  .booked:hover {
+      background: #d6caa5;
+  }
+
+
+
+/* Highlight the selected start/end dates */
+.day.selected {
+    background: var(--nav-color); /* Blue color for selection */
+    color: white;
+    font-weight: 700;
+}
+
+/* Highlight the dates in the range (nights being stayed) */
+.day.range {
+    background: var(--light-blue); /* Light blue */
+    color: #333;
+}
+
+/* Ensure booked days are not clickable */
+.day[data-booked="true"] {
+    pointer-events: none; /* Disables clicks on booked days */
+    opacity: 0.6;
+}
+
+/* Empty days for proper month alignment */
+.day.empty {
+    background: none;
+    border: none;
+    pointer-events: none;
 }

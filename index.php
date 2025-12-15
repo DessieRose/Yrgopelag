@@ -1,4 +1,9 @@
-<?php require (__DIR__ . '/app/php/header.php'); ?>
+<?php 
+require (__DIR__ . '/app/autoload.php');
+require (__DIR__ . '/views/header.php'); 
+
+require __DIR__ . '/vendor/autoload.php';
+?>
 
     <section class="rooms">
         <div class="room">
@@ -31,6 +36,6 @@
 
 
 
-<?php require (__DIR__ . '/app/php/footer.php'); ?>
+<?php require (__DIR__ . '/views/footer.php'); ?>
 
 

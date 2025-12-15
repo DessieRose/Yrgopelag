@@ -1,0 +1,26 @@
+.calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+    max-width: 700px;
+}
+
+.calendar div {
+    padding: 12px;
+    text-align: center;
+    border-radius: 6px;
+    font-weight: bold;
+}
+  
+.calendar .day-name {
+    background: #eee;
+}
+
+.calendar .free {
+    background: #c8f7c5;
+}
+
+.calendar .booked {
+    background: #f7c5c5;
+    color: #900;
+}

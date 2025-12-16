@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 // Fetch availability data
 $availability = getRoomAvailability($database, $roomId); 
@@ -8,15 +9,41 @@ $bookedDays = $availability['booked_dates'];
 // Ensure room ID is available to JavaScript
 ?>
 
-<div class="room-calendar" data-room-id="<?= $roomId; ?>">
+<div class="room-booking-block" data-room-id="<?= $roomId; ?>">
     <h3>Availability - January 2026</h3>
+    
+    <form action="booking.php" method="POST" class="booking-form">
+        <input type="hidden" name="room_id" value="<?= $roomId; ?>">
+        
+        <div class="date-inputs">
+            <label for="arrival-<?= $roomId; ?>">Arrival Date (15:00)</label>
+            <input type="date" 
+                   id="arrival-<?= $roomId; ?>" 
+                   name="arrival_date" 
+                   required
+                   min="2026-01-01" 
+                   max="2026-01-31">
 
-    <div class="selected-dates-info">
-        <span class="check-in-display">Check-in: --</span> | 
-        <span class="check-out-display">Check-out: --</span>
-    </div>
+            <label for="departure-<?= $roomId; ?>">Departure Date (11:00)</label>
+            <input type="date" 
+                   id="departure-<?= $roomId; ?>" 
+                   name="departure_date" 
+                   required
+                   min="2026-01-02" 
+                   max="2026-02-01"> </div>
 
+        <button type="submit">Check Price & Book</button>
+    </form>
+    
     <section class="calendar">
+        <div class="day-label">Mon</div>
+        <div class="day-label">Tue</div>
+        <div class="day-label">Wed</div>
+        <div class="day-label">Thu</div>
+        <div class="day-label">Fri</div>
+        <div class="day-label">Sat</div>
+        <div class="day-label">Sun</div>
+
         <div class="day empty"></div>
         <div class="day empty"></div>
         <div class="day empty"></div>
@@ -32,17 +59,14 @@ $bookedDays = $availability['booked_dates'];
             if ($isWeekend) {
                 $classes .= " weekend";
             }
-            // Add data attributes for JS to read
-            $dataAttributes = "data-day='2026-01-{$day}'"; 
-            if ($isBooked) {
-                $dataAttributes .= " data-booked='true'";
-            }
+            
+            $dayOfMonth = str_pad((string)$day, 2, '0', STR_PAD_LEFT);
+            $dataDate = "2026-01-{$dayOfMonth}";
             ?>
             
-            <div class="<?= $classes; ?>" <?= $dataAttributes; ?>>
+            <div class="<?= $classes; ?>" title="<?= $isBooked ? 'BOOKED' : 'Available'; ?>">
                 <?= $day; ?>
             </div>
         <?php endfor; ?>
     </section>
 </div>
-

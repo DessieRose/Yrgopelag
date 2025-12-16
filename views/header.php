@@ -30,5 +30,5 @@
         </nav> -->
     </header>
     <div class="hero-img">
-        <img src="https://www.eroshotel.it/images/eolie/vulcano/gallery-vulcano-02.jpg" alt="hero-img">
+        <img src="/assets/images/hotel-images/hero-image_2.png" alt="hero-img">
     </div>

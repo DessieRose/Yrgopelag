@@ -13,7 +13,6 @@
     body {
         font-size: 16px;
         text-align: center;
-        background-color: white;
         font-family: "Inter", sans-serif;
     }
 
@@ -61,8 +60,20 @@
     h1 {
         font-size: 3em;
         font-weight: 700;
-    
+    }
 
+    h3 {
+        font-size: 1.5rem;
+
+    }
+
+    h4 {
+        font-size: 1rem;
+        padding: 0.5rem;
+    }
+
+    p {
+        margin: 0 0 1rem 0;
     }
     
     .hero-img img {

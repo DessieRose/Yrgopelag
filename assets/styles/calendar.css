@@ -31,11 +31,11 @@
   }
     
   /* Weekends */
-  .weekend {
+  /* .weekend {
     background: #fbe9e7;
     color: #b71c1c;
     font-weight: 500;
-  }
+  } */
   
   /* Booked dates */
   .booked {
@@ -74,4 +74,17 @@
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
+}
+
+.room {
+    background-color: #ffe5bf;
+    padding: 2rem;
+}
+
+.price-box { 
+    margin-top: 20px; 
+    padding: 10px; 
+    background: #f4f4f4; 
+    border-radius: 5px; 
+    font-family: sans-serif; 
 }

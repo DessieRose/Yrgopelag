@@ -10,7 +10,7 @@ $bookedDays = $availability['booked_dates'];
 ?>
 
 <div class="room-booking-block" data-room-id="<?= $roomId; ?>">
-    <h3>Availability - January 2026</h3>
+    <h4>Availability - January 2026</h4>
     
     <form action="booking.php" method="POST" class="booking-form">
         <input type="hidden" name="room_id" value="<?= $roomId; ?>">
@@ -32,7 +32,8 @@ $bookedDays = $availability['booked_dates'];
                    min="2026-01-02" 
                    max="2026-02-01"> </div>
 
-        <button type="submit">Check Price & Book</button>
+        <div id="total-cost"><strong>Total: $0</strong></div>
+        <button type="submit">Book hotel</button>
     </form>
     
     <section class="calendar">
@@ -56,9 +57,9 @@ $bookedDays = $availability['booked_dates'];
             if ($isBooked) {
                 $classes .= " booked";
             }
-            if ($isWeekend) {
-                $classes .= " weekend";
-            }
+            // if ($isWeekend) {
+            //     $classes .= " weekend";
+            // }
             
             $dayOfMonth = str_pad((string)$day, 2, '0', STR_PAD_LEFT);
             $dataDate = "2026-01-{$dayOfMonth}";

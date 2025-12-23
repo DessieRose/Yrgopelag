@@ -32,8 +32,8 @@ $bookedDays = $availability['booked_dates'];
                    min="2026-01-02" 
                    max="2026-02-01"> </div>
 
-        <div id="total-cost"><strong>Total: $0</strong></div>
-        <button type="submit">Book hotel</button>
+        <div class="total-cost"><strong>Total:</strong></div>
+        <button type="submit">Book</button>
     </form>
     
     <section class="calendar">

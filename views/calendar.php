@@ -12,7 +12,7 @@ $bookedDays = $availability['booked_dates'];
 <div class="room-booking-block" data-room-id="<?= $roomId; ?>">
     <h3>Availability - January 2026</h3>
     
-    <form action="booking.php" method="POST" class="booking-form">
+    <form action="/app/src/booking.php" method="POST" class="booking-form">
         <input type="hidden" name="room_id" value="<?= $roomId; ?>">
         
         <div class="date-inputs">
@@ -22,7 +22,7 @@ $bookedDays = $availability['booked_dates'];
                    name="arrival_date" 
                    required
                    min="2026-01-01" 
-                   max="2026-01-31">
+                   max="2026-01-30">
 
             <label for="departure-<?= $roomId; ?>">Departure Date (11:00)</label>
             <input type="date" 
@@ -30,9 +30,14 @@ $bookedDays = $availability['booked_dates'];
                    name="departure_date" 
                    required
                    min="2026-01-02" 
-                   max="2026-02-01"> </div>
+                   max="2026-01-31"> </div>
 
+<<<<<<< Updated upstream
         <button type="submit">Check Price & Book</button>
+=======
+        <div class="total-cost"><strong>Total:</strong></div>
+        <button type="submit">Book</button>
+>>>>>>> Stashed changes
     </form>
     
     <section class="calendar">

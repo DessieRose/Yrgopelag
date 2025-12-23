@@ -33,8 +33,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
                 totalCost.innerHTML =
-                    `<strong>Total:</strong> ${data.totalCost} credits <br>
-                    <small>(${data.nightlyRate} credits/ night x ${data.nights} nights)</small>`;
+                    `<strong>Total:</strong> $${data.totalCost} <br>
+                    <small>($${data.nightlyRate} x ${data.nights} nights)</small>`;
             })
             .catch(error => {
                 console.error('Error:', error);

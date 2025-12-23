@@ -11,31 +11,7 @@ $bookedDays = $availability['booked_dates'];
 
 <div class="room-booking-block" data-room-id="<?= $roomId; ?>">
     <h4>Availability - January 2026</h4>
-    
-    <form action="/app/src/booking.php" method="POST" class="booking-form">
-        <input type="hidden" name="room_id" value="<?= $roomId; ?>">
-        
-        <div class="date-inputs">
-            <label for="arrival-<?= $roomId; ?>">Arrival Date (15:00)</label>
-            <input type="date" 
-                   id="arrival-<?= $roomId; ?>" 
-                   name="arrival_date" 
-                   required
-                   min="2026-01-01" 
-                   max="2026-01-30">
 
-            <label for="departure-<?= $roomId; ?>">Departure Date (11:00)</label>
-            <input type="date" 
-                   id="departure-<?= $roomId; ?>" 
-                   name="departure_date" 
-                   required
-                   min="2026-01-02" 
-                   max="2026-01-31"> </div>
-
-        <div class="total-cost"><strong>Total:</strong></div>
-        <button type="submit">Book</button>
-      
-    </form>
     
     <section class="calendar">
         <div class="day-label">Mon</div>
@@ -45,12 +21,12 @@ $bookedDays = $availability['booked_dates'];
         <div class="day-label">Fri</div>
         <div class="day-label">Sat</div>
         <div class="day-label">Sun</div>
-
+        
         <div class="day empty"></div>
         <div class="day empty"></div>
         <div class="day empty"></div>
 
-        <?php for ($day = 1; $day <= 31; $day++):
+         <?php for ($day = 1; $day <= 31; $day++):
             $isBooked = in_array($day, $bookedDays);
             $isWeekend = isWeekend($day);
             
@@ -71,4 +47,5 @@ $bookedDays = $availability['booked_dates'];
             </div>
         <?php endfor; ?>
     </section>
+    <a href="/app/src/booking.php" class="book-button">Book</a>
 </div>

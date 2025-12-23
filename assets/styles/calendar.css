@@ -88,3 +88,19 @@
     border-radius: 5px; 
     font-family: sans-serif; 
 }
+
+.book-button {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: var(--light-blue);
+    color: black;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.book-button:hover {
+    background-color: var(--dark-blue);
+    color: white;
+    box-shadow: #333 0px 2px 4px;
+}

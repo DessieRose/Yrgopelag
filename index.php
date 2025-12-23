@@ -6,12 +6,15 @@ global $database;
 $availabilityInfo = '<Booked days are marked in gold.';
 
 ?>
+    <div class="hero-img">
+        <img src="/assets/images/hotel-images/hero-image_2.png" alt="hero-img">
+    </div>
 
     <section class="rooms">
         <div class="room">
             <h3>Budget</h3>
             <p>The Cave</p>
-            <img src="/assets/images/hotel-images/rooms/room_ budget.png" alt="budget-room">
+            <img src="/assets/images/hotel-images/rooms/room_budget.png" alt="budget-room">
             <?php $roomId = 1; // Budget Room
             include 'views/calendar.php'; ?>
             <p class="availability-info"><?php $availabilityInfo ?></p>
@@ -22,13 +25,15 @@ $availabilityInfo = '<Booked days are marked in gold.';
             <img src="/assets/images/hotel-images/rooms/room_standard.png" alt="standard-room">
             <?php $roomId = 2; // Standard Room
             include 'views/calendar.php'; ?>
+            <p class="availability-info"><?php $availabilityInfo ?></p>
         </div>
         <div class="room">
             <h3>Luxury</h3>
             <p>The Volcano Suite</p>
-            <img src="/assets/images/hotel-images/rooms/room_ luxury.png" alt="luxery-room">
+            <img src="/assets/images/hotel-images/rooms/room_luxury.png" alt="luxery-room">
             <?php $roomId = 3; // Luxury Room
             include 'views/calendar.php'; ?>
+            <p class="availability-info"><?php $availabilityInfo ?></p>
         </div>
     </section>
     

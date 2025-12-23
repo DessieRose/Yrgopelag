@@ -15,6 +15,7 @@
             <ul>
                 <img class="logo" src="/assets/images/logo.png" alt="logo">
                 <li class="hotelname">The Semicolon Sanctuary</li>
+                <i> <?php $starId = 1 ?></i>
             </ul>
             <ul>
             <li>
@@ -23,12 +24,4 @@
                 <li><a href="">Login</a></li>
             </ul>
         </nav>
-        <!-- <nav class="nav-right">
-            <ul>
-                
-            </ul>
-        </nav> -->
     </header>
-    <div class="hero-img">
-        <img src="/assets/images/hotel-images/hero-image_2.png" alt="hero-img">
-    </div>

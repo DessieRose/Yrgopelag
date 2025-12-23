@@ -1,10 +1,16 @@
 <?php
 declare(strict_types=1);
 
+if (isset($pdo)) {
+    $pdo = $pdo;
+} else {
+    // Fallback if your autoload doesn't create the variable automatically
+    // $pdo = new PDO('sqlite:your_db_path.db');
+}
 function getRoomAvailability(\PDO $pdo, int $roomId): array
 {
     // Fetch the room name
-    $stmtRoom = $pdo->prepare("SELECT name FROM rooms WHERE id = :id");
+    $stmtRoom = $pdo->prepare("SELECT * FROM rooms WHERE id = :id");
     $stmtRoom->bindParam(':id', $roomId, PDO::PARAM_INT);
     $stmtRoom->execute();
 
@@ -44,21 +50,92 @@ function getRoomAvailability(\PDO $pdo, int $roomId): array
     ];
 }
 
-/**
- * Determines if a given day of the month (1-31) is a weekend in Jan 2026.
- * January 1, 2026 is a Thursday.
- * @param int $day Day of the month (1-31).
- * @return bool
- */
+
 function isWeekend(int $day): bool
 {
-    // Jan 1 (day 1) is a Thursday (4)
-    // Fri (5) and Sat (6) are weekend (We'll simplify to Sat/Sun for grading)
-    
-    // Jan 3 (day 3) is a Saturday (6)
-    // Jan 4 (day 4) is a Sunday (7)
     $dayOfWeek = ($day + 3) % 7; // (Day 1 + 3) % 7 = 4 (Thursday)
-
-    // 6 = Saturday, 0 = Sunday
     return $dayOfWeek === 6 || $dayOfWeek === 0;
+}
+
+
+function calculateTotalCost(string $arrivalDate, string $departureDate, float $nightlyRate): float
+{
+    $arrival = new DateTime($arrivalDate);
+    $departure = new DateTime($departureDate);
+    $interval = $arrival->diff($departure);
+    $nights = (int)$interval->format('%a');
+
+    return $nights * $nightlyRate;
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    require_once __DIR__ . '/../../vendor/autoload.php';
+    require_once __DIR__ . '/autoload.php';
+    header('Content-Type: application/json');
+
+    $input = file_get_contents('php://input');
+    $data = json_decode($input, true);
+
+    try {
+        $dbName = 'hotel.db'; // CHECK THIS NAME
+        $dbPath = __DIR__ . '/../database/' . $dbName; // Adjust path to where your .db file is
+        $pdo = new PDO("sqlite:$dbPath");
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    } catch (PDOException $e) {
+        // Send a JSON error back if connection fails
+        echo json_encode(['success' => false, 'error' => 'DB Connection failed']);
+        exit;
+    }
+
+    // 2. Process the JSON input
+    $header = $_SERVER['CONTENT_TYPE'] ?? '';
+    if (strpos($header, 'application/json') !== false) {
+        $input = file_get_contents('php://input');
+        $data = json_decode($input, true);
+
+        if (($data['action'] ?? '') === 'calculateTotalCost') {
+            $roomId = (int)$data['room_id'];
+            $arrivalDate = $data['arrival_date'];
+            $departureDate = $data['departure_date'];
+
+            // Fetch room price using the local $pdo connection
+            $stmt = $pdo->prepare("SELECT price FROM rooms WHERE id = :id");
+            $stmt->execute(['id' => $roomId]);
+            $room = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$room) {
+                echo json_encode(['success' => false, 'error' => 'Room not found']);
+                exit;
+            }
+
+            $nightlyRate = (float)$room['price'];
+
+            try {
+                $arrival = new DateTime($arrivalDate);
+                $departure = new DateTime($departureDate);
+                
+                if ($arrival >= $departure) {
+                    echo json_encode(['success' => false, 'error' => 'Check-out must be after check-in']);
+                    exit;
+                }
+
+                $interval = $arrival->diff($departure);
+                $nights = (int)$interval->format('%a');
+                $totalCost = $nights * $nightlyRate;
+
+                // Send clean JSON back
+                echo json_encode([
+                    'success' => true,
+                    'nightlyRate' => $nightlyRate,
+                    'nights' => $nights,
+                    'totalCost' => $totalCost
+                ]);
+                exit;
+
+            } catch (Exception $e) {
+                echo json_encode(['success' => false, 'error' => 'Invalid dates']);
+                exit;
+            }
+        }
+    }
 }

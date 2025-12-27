@@ -52,9 +52,12 @@ try {
         throw new Exception("Room is already booked for these dates.");
     }
 
-    $stmtRoom = $database->prepare("SELECT price, type FROM rooms WHERE id = :id");
+    $stmtRoom = $database->prepare("SELECT room_number, type, price FROM rooms WHERE id = :id");
     $stmtRoom->execute([':id' => $roomId]);
     $room = $stmtRoom->fetch(PDO::FETCH_ASSOC);
+
+    $stmtSettings = $database->query("SELECT hotel_stars FROM settings WHERE id = 1");
+    $stars = $stmtSettings->fetchColumn();
 
     // Calculate Nights
     $arrival = new DateTime($arrivalDate);
@@ -74,7 +77,7 @@ try {
     if (!empty($featureIds)) {
         // Create placeholders for SQL
         $placeholders = implode(',', array_fill(0, count($featureIds), '?'));
-        $stmtFeatures = $database->prepare('SELECT id, name, price FROM hotel_features WHERE id IN (' . $placeholders . ')');
+        $stmtFeatures = $database->prepare('SELECT id, name, tier_name, price, active FROM features WHERE id IN (' . $placeholders . ')');
         $stmtFeatures->execute($featureIds);
         $featuresDB = $stmtFeatures->fetchAll(PDO::FETCH_ASSOC);
 
@@ -114,7 +117,7 @@ try {
             "room_price" => $room['price'],
             "total_cost" => $totalCost,
             "features_used" => $featuresDetails, // Sending our array of selected features
-            "star_rating" => 3 // Your hotel stars
+            "star_rating" => (int)$stars,
         ]
     ]);
 
@@ -163,7 +166,7 @@ try {
             "arrival_date" => $arrivalDate,
             "departure_date" => $departureDate,
             "total_cost" => $totalCost,
-            "stars" => 3,
+            "stars" => (int)$stars,
             "features" => $featuresDetails,
             "additional_info" => "Thank you for choosing $hotelName."
         ]

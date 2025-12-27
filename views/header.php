@@ -6,6 +6,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="stylesheet" href="/assets/styles/app.css">
     <link rel="stylesheet" href="/assets/styles/calendar.css">
+    <link rel="stylesheet" href="/assets/styles/booking.css">
     <link rel="icon" href="/assets/images/favicon_64.png">
     <title>Yrgopelag</title>
 </head>
@@ -13,8 +14,10 @@
     <header>
         <nav>
             <ul>
-                <img class="logo" src="/assets/images/logo.png" alt="logo">
-                <li class="hotelname">The Semicolon Sanctuary</li>
+                <a class="home-link" href="/index.php">
+                    <img class="logo" src="/assets/images/logo.png" alt="logo">
+                    <li class="hotelname">The Semicolon Sanctuary</li>
+                </a>
                 <i> <?php $starId = 1 ?></i>
             </ul>
             <ul>

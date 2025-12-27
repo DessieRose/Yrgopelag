@@ -48,6 +48,13 @@
         list-style-type: none;
     }
 
+    .home-link {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: white;
+    }
+
     .logo {
         height: 50px;
         align-self: center;

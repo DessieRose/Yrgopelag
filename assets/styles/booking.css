@@ -1,12 +1,15 @@
 /* Booking Page Specific Styles */
 .booking-container {
-    max-width: 600px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    /* grid-template-rows: 12px 12px 12px; */
+    max-width: 90%;
     margin: 3rem auto;
     padding: 2rem;
-    background: #f9f9fb;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    text-align: left; /* Better for forms than center-align */
+    background: var(--off-white);
+    border-radius: 2rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    text-align: left;
 }
 
 .booking-container h2 {
@@ -125,4 +128,12 @@
 
 .feature-item {
     margin-left: 1rem; /* Indent features under the heading */
+}
+
+.rooms-booking {
+    display: grid;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    gap: 2rem;
+    /* margin-top: 2rem; */
 }

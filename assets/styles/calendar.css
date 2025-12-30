@@ -15,7 +15,7 @@
     justify-content: center;
     font-weight: bold;
     font-size: 0.8rem;
-    color: #333;
+    color: white;
 }
   
   .day {
@@ -31,11 +31,11 @@
   }
     
   /* Weekends */
-  /* .weekend {
+  .weekend {
     background: #fbe9e7;
     color: #b71c1c;
     font-weight: 500;
-  } */
+  }
   
   /* Booked dates */
   .booked {
@@ -77,8 +77,9 @@
 }
 
 .room {
-    background-color: #ffe5bf;
+    background-color: var(--dark-blue);
     padding: 2rem;
+    border-radius: 2rem;
 }
 
 .price-box { 
@@ -94,13 +95,13 @@
     margin-top: 15px;
     padding: 10px 20px;
     background-color: var(--light-blue);
-    color: black;
+    color: var(--off-white);
     text-decoration: none;
     border-radius: 5px;
 }
 
 .book-button:hover {
-    background-color: var(--dark-blue);
-    color: white;
+    background-color: var(--off-white);
+    color: var(--dark-blue);
     box-shadow: #333 0px 2px 4px;
 }

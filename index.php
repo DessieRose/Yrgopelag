@@ -16,6 +16,7 @@ global $database;
             <img src="/assets/images/hotel-images/rooms/room_budget.png" alt="budget-room">
             <?php $roomId = 1; // Budget Room
             include 'views/calendar.php'; ?>
+            <a href="/app/src/booking.php" class="book-button">Book</a>
         </div>
         <div class="room">
             <h3>Standard</h3>
@@ -23,6 +24,7 @@ global $database;
             <img src="/assets/images/hotel-images/rooms/room_standard.png" alt="standard-room">
             <?php $roomId = 2; // Standard Room
             include 'views/calendar.php'; ?>
+            <a href="/app/src/booking.php" class="book-button">Book</a>
         </div>
         <div class="room">
             <h3>Luxury</h3>
@@ -30,6 +32,7 @@ global $database;
             <img src="/assets/images/hotel-images/rooms/room_luxury.png" alt="luxery-room">
             <?php $roomId = 3; // Luxury Room
             include 'views/calendar.php'; ?>
+            <a href="/app/src/booking.php" class="book-button">Book</a>
         </div>
     </section>
     

@@ -10,8 +10,7 @@ $bookedDays = $availability['booked_dates'];
 ?>
 
 <div class="room-booking-block" data-room-id="<?= $roomId; ?>">
-    <h4>Availability - January 2026</h4>
-
+    <!-- <h4>Availability - January 2026</h4> -->
     
     <section class="calendar">
         <div class="day-label">Mon</div>
@@ -34,9 +33,9 @@ $bookedDays = $availability['booked_dates'];
             if ($isBooked) {
                 $classes .= " booked";
             }
-            // if ($isWeekend) {
-            //     $classes .= " weekend";
-            // }
+            if ($isWeekend) {
+                $classes .= " weekend";
+            }
             
             $dayOfMonth = str_pad((string)$day, 2, '0', STR_PAD_LEFT);
             $dataDate = "2026-01-{$dayOfMonth}";
@@ -47,5 +46,4 @@ $bookedDays = $availability['booked_dates'];
             </div>
         <?php endfor; ?>
     </section>
-    <a href="/app/src/booking.php" class="book-button">Book</a>
 </div>

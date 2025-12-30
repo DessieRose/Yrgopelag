@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 require (__DIR__ . '/../../vendor/autoload.php');
-require __DIR__ . '/autoloade.php';
+require __DIR__ . '/autoload.php';
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
 
 header('Content-Type: application/json');
 
@@ -16,8 +17,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 // CONFIGURATION: Set your Hotel's Name and API Key here
-$hotelUserName = 'The Volcano Resort'; // Your "user" in the docs
-$apiKey = 'your-api-key-here';     // The API key provided by the school
+$hotelUserName = $_ENV['ISLAND_USER'];
+$apiKey = $_ENV['API_KEY'];
 
 try {
     // collect and sanitize input
@@ -74,18 +75,21 @@ try {
     $featuresCost = 0;
     $featuresDetails = [];
 
-    if (!empty($featureIds)) {
+    if (!empty($selectedFeatures)) {
+        $selectedFeatures = array_map('intval', $selectedFeatures);
+        
         // Create placeholders for SQL
-        $placeholders = implode(',', array_fill(0, count($featureIds), '?'));
-        $stmtFeatures = $database->prepare('SELECT id, name, tier_name, price, active FROM features WHERE id IN (' . $placeholders . ')');
-        $stmtFeatures->execute($featureIds);
+        $placeholders = implode(',', array_fill(0, count($selectedFeatures), '?'));
+        
+        $stmtFeatures = $database->prepare('SELECT id, name, price FROM features WHERE id IN (' . $placeholders . ')');
+        $stmtFeatures->execute($selectedFeatures);
         $featuresDB = $stmtFeatures->fetchAll(PDO::FETCH_ASSOC);
 
         foreach ($featuresDB as $feat) {
-            $featuresCost += $feat['price'];
+            $featuresCost += (int)$feat['price'];
             $featuresDetails[] = [
                 "name" => $feat['name'],
-                "cost" => $feat['price']
+                "cost" => (int)$feat['price']
             ];
         }
     }
@@ -94,43 +98,35 @@ try {
 
     $client = new Client();
 
-    $response = $client->post('https://www.yrgopelag.se/centralbank/transferCode', [
-        'json' => [
-            'transferCode' => $transferCode,
-            'totalCost' => $totalCost
-        ]
-    ]);
-
-    $transferCheck = json_decode($response->getBody()->getContents(), true);
-
-    if (isset($transferCheck['error'])) {
-        throw new Exception("Invalid Transfer Code: " . $transferCheck['error']);
+    try {
+        $response = $client->request('POST', 'https://www.yrgopelag.se/centralbank/deposit', [
+            'form_params' => [
+                'user' => $hotelUserName,
+                'transferCode' => $transferCode,
+                'amount' => $totalCost
+            ]
+        ]);
+        
+        // If we got here, the bank said OK! 
+        $responseBody = json_decode($response->getBody()->getContents(), true);
+    
+    } catch (ClientException $e) {
+        // 4xx Errors (User error: bad code, wrong amount)
+        echo json_encode(['error' => 'Bank declined: ' . $e->getResponse()->getBody()->getContents()]);
+        exit;
+    } catch (ServerException $e) {
+        // 5xx Errors (Bank server error)
+        echo json_encode(['error' => 'Bank server error. Try again later or check your transfer code value.']);
+        exit;
     }
 
-    $receiptResponse = $client->post('https://www.yrgopelag.se/centralbank/receipt', [
-        'json' => [
-            "user" => $hotelUserName,
-            "api_key" => $apiKey,
-            "guest_name" => $userName,
-            "arrival_date" => $arrivalDate,
-            "departure_date" => $departureDate,
-            "room_price" => $room['price'],
-            "total_cost" => $totalCost,
-            "features_used" => $featuresDetails, // Sending our array of selected features
-            "star_rating" => (int)$stars,
-        ]
-    ]);
-
-    $receiptData = json_decode($receiptResponse->getBody()->getContents(), true);
-
-    $database->beginTransaction();
-
-    $insertBooking = $database->prepare("
+    // If payment was successful, insert the booking into the database
+    $stmtInsert = $database->prepare("
         INSERT INTO bookings (room_id, user_name, arrival_date, departure_date, total_cost, transfer_code)
         VALUES (:room_id, :user_name, :arrival_date, :departure_date, :total_cost, :transfer_code)
     ");
 
-    $insertBooking->execute([
+    $stmtInsert->execute([
         ':room_id' => $roomId,
         ':user_name' => $userName,
         ':arrival_date' => $arrivalDate,
@@ -141,50 +137,31 @@ try {
 
     $bookingId = $database->lastInsertId();
 
-    if (!empty($featureIds)) {
-        $insertFeature = $database->prepare("INSERT INTO booking_features (booking_id, hotel_feature_id) VALUES (?, ?)");
-        foreach ($featureIds as $featId) {
-            $insertFeature->execute([$bookingId, $featId]);
+    // Insert booking features if any
+    if (!empty($selectedFeatures)) {
+        $stmtBookingFeatures = $database->prepare("
+            INSERT INTO booking_features (booking_id, feature_id)
+            VALUES (:booking_id, :feature_id)
+        ");
+
+        foreach ($selectedFeatures as $featureId) {
+            $stmtBookingFeatures->execute([
+                ':booking_id' => $bookingId,
+                ':feature_id' => (int)$featureId
+            ]);
         }
     }
 
-    $database->commit();
-
-    $depositResponse = $client->post('https://www.yrgopelag.se/centralbank/deposit', [
-        'json' => [
-            "user" => $hotelUserName,
-            "transferCode" => $transferCode
-        ]
-    ]);
-
+    // Return success response
     echo json_encode([
-        "success" => true,
-        "message" => "Booking confirmed!",
-        "booking_details" => [
-            "island" => "Volcano island",
-            "hotel" => $hotelName,
-            "arrival_date" => $arrivalDate,
-            "departure_date" => $departureDate,
-            "total_cost" => $totalCost,
-            "stars" => (int)$stars,
-            "features" => $featuresDetails,
-            "additional_info" => "Thank you for choosing $hotelName."
-        ]
+        'success' => true,
+        'message' => 'Booking confirmed!',
+        'bookingId' => $bookingId,
+        'totalCost' => $totalCost
     ]);
-
-} catch (ClientException $e) {
-    // Catch Guzzle errors (4xx or 5xx from Central Bank)
-    if ($database->inTransaction()) {
-        $database->rollBack();
-    }
-    $response = $e->getResponse();
-    $responseBodyAsString = $response->getBody()->getContents();
-    echo json_encode(['error' => 'Central Bank Error: ' . $responseBodyAsString]);
 
 } catch (Exception $e) {
-    // Catch general PHP errors
-    if ($database->inTransaction()) {
-        $database->rollBack();
-    }
+    // Handle any other exceptions from the outer try block
     echo json_encode(['error' => $e->getMessage()]);
+    exit;
 }

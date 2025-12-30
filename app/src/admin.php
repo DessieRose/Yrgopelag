@@ -1,5 +1,11 @@
 <?php
 declare(strict_types=1);
+session_start();
+
+if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+    header('Location: login.php');
+    exit;
+}
 
 require (__DIR__ . '/autoload.php');
 require (__DIR__ . '/../../views/header.php'); 
@@ -28,11 +34,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // C. Update Features (Active Status)
         // First, set all to inactive (0), then strictly enable the checked ones
-        $database->exec("UPDATE features SET is_active = 0");
+        $database->exec("UPDATE features SET active = 0");
 
         if (isset($_POST['active_features'])) {
             foreach ($_POST['active_features'] as $featureId) {
-                $stmtFeat = $database->prepare("UPDATE features SET is_active = 1 WHERE id = ?");
+                $stmtFeat = $database->prepare("UPDATE features SET active = 1 WHERE id = ?");
                 $stmtFeat->execute([(int)$featureId]);
             }
         }
@@ -92,7 +98,7 @@ $features = $stmtFeatures->fetchAll(PDO::FETCH_ASSOC);
             <div class="grid-3">
                 <?php foreach ($rooms as $room): ?>
                     <div class="room-card">
-                        <h4><?= $room['name']; ?></h4>
+                        <h4><?= $room['type']; ?></h4>
                         <label>Price per night ($):</label>
                         <input type="number" 
                                name="room_prices[<?= $room['id']; ?>]" 
@@ -105,7 +111,7 @@ $features = $stmtFeatures->fetchAll(PDO::FETCH_ASSOC);
 
         <section class="admin-section">
             <h2>Manage Features</h2>
-            <p>Uncheck a box to disable the feature on the booking page.</p>
+            <p class="peragraph">Uncheck a box to disable the feature on the booking page.</p>
             <div class="features-list">
                 <?php foreach ($features as $feature): ?>
                     <div class="feature-item">
@@ -113,7 +119,7 @@ $features = $stmtFeatures->fetchAll(PDO::FETCH_ASSOC);
                                id="feat_<?= $feature['id']; ?>" 
                                name="active_features[]" 
                                value="<?= $feature['id']; ?>"
-                               <?= $feature['is_active'] ? 'checked' : ''; ?>>
+                               <?= $feature['active'] ? 'checked' : ''; ?>>
                         <label for="feat_<?= $feature['id']; ?>">
                             <?= $feature['name']; ?> ($<?= $feature['price']; ?>)
                         </label>
@@ -134,6 +140,7 @@ $features = $stmtFeatures->fetchAll(PDO::FETCH_ASSOC);
     .features-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
     .save-btn { background: #2c3e50; color: white; padding: 1rem 2rem; border: none; cursor: pointer; font-size: 1.1rem; }
     .alert { background: #d4edda; color: #155724; padding: 1rem; margin-bottom: 1rem; border: 1px solid #c3e6cb; }
+    .peragraph { color: var(--nav-color); }
 </style>
 
 <?php require (__DIR__ . '/../../views/footer.php'); ?>

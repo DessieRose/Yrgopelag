@@ -10,6 +10,14 @@
     <link rel="icon" href="/assets/images/favicon_64.png">
     <title>Yrgopelag</title>
 </head>
+
+<?php 
+// Start session if not already started to check login status
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+?>
+
 <body>
     <header>
         <nav>
@@ -21,10 +29,14 @@
                 <i> <?php $starId = 1 ?></i>
             </ul>
             <ul>
-            <li>
-                <a href="">Packadges</a></li>
-                <li><a href="">Features</a></li>
-                <!-- <li><a href="">Login</a></li> -->
+                <li><a href="/index.php">Home</a></li>
+                <li><a href="/app/src/booking.php">Booking</a></li>
+                <?php if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true): ?>
+                    <li><a href="/app/src/admin.php">Admin Dashboard</a></li>
+                    <li><a href="/app/src/logout.php" style="color: rgb(255, 88, 88); font-weight: 700;">Logout</a></li>
+                <?php else: ?>
+                    <li><a href="/app/src/login.php">Owner Login</a></li>
+                <?php endif; ?>
             </ul>
         </nav>
     </header>

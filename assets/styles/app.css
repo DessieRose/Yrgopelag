@@ -8,6 +8,7 @@
         --dark-blue: #2E386B;
         --light-blue: #80AEFF;
         --nav-color: #475082;
+        --off-white: #f9f9fb;
     }
 
     body {
@@ -48,6 +49,13 @@
         list-style-type: none;
     }
 
+    .home-link {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: white;
+    }
+
     .logo {
         height: 50px;
         align-self: center;
@@ -63,6 +71,7 @@
     }
 
     h3 {
+        color: var(--light-blue);
         font-size: 1.5rem;
 
     }
@@ -73,6 +82,7 @@
     }
 
     p {
+        color: white;
         margin: 0 0 1rem 0;
     }
     

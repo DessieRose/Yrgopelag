@@ -11,6 +11,12 @@ date_default_timezone_set('UTC');
 // Set the default character encoding to UTF-8.
 mb_internal_encoding('UTF-8');
 
+// Load environment variables from .env file
+require_once __DIR__ . '/../../vendor/autoload.php';
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../'); 
+$dotenv->load();
+
 // Include the helper functions.
 require_once __DIR__ . '/functions.php';
 

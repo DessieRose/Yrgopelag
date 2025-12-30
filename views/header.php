@@ -16,18 +16,26 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
+$stmtStars = $database->query("SELECT hotel_stars FROM settings WHERE id = 1");
+$starCount = (int)$stmtStars->fetchColumn();
 ?>
 
 <body>
     <header>
         <nav>
-            <ul>
-                <a class="home-link" href="/index.php">
-                    <img class="logo" src="/assets/images/logo.png" alt="logo">
-                    <li class="hotelname">The Semicolon Sanctuary</li>
-                </a>
-                <i> <?php $starId = 1 ?></i>
-            </ul>
+            <a class="home-link" href="/index.php">
+                <img class="logo" src="/assets/images/logo.png" alt="logo">
+                <div class="hotel-info">
+                    <h1 class="hotelname">The Semicolon Sanctuary</h1>
+                    <div class="hotel-stars">
+                        <?php for ($i = 0; $i < $starCount; $i++) {
+                            echo "⭐"; 
+                        } ?>
+                    </div>
+                </div>
+            </a>
+            <i> <?php $starId = 1 ?></i>
             <ul>
                 <li><a href="/index.php">Home</a></li>
                 <li><a href="/app/src/booking.php">Booking</a></li>
@@ -40,3 +48,4 @@ if (session_status() === PHP_SESSION_NONE) {
             </ul>
         </nav>
     </header>
+   

@@ -140,7 +140,6 @@ $features = $stmtFeatures->fetchAll(PDO::FETCH_ASSOC);
     .features-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
     .save-btn { background: #2c3e50; color: white; padding: 1rem 2rem; border: none; cursor: pointer; font-size: 1.1rem; }
     .alert { background: #d4edda; color: #155724; padding: 1rem; margin-bottom: 1rem; border: 1px solid #c3e6cb; }
-    .peragraph { color: var(--nav-color); }
 </style>
 
 <?php require (__DIR__ . '/../../views/footer.php'); ?>

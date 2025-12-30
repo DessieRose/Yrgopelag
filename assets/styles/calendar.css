@@ -33,13 +33,13 @@
   /* Weekends */
   .weekend {
     background: #fbe9e7;
-    color: #b71c1c;
+    color: #dc3939;
     font-weight: 500;
   }
   
   /* Booked dates */
   .booked {
-    background: #bd9321;
+    background: var(--pale-orange);
     border-color: #7b4002;
     color: #b26229;
     font-weight: 600;
@@ -91,17 +91,15 @@
 }
 
 .book-button {
-    display: inline-block;
-    margin-top: 15px;
-    padding: 10px 20px;
     background-color: var(--light-blue);
-    color: var(--off-white);
-    text-decoration: none;
-    border-radius: 5px;
+    color: var(--dark-blue);
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.2s;
 }
 
 .book-button:hover {
-    background-color: var(--off-white);
-    color: var(--dark-blue);
-    box-shadow: #333 0px 2px 4px;
+    background-color: #a3c4ff;
+    transform: translateY(-2px);
 }

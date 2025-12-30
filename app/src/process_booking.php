@@ -57,6 +57,10 @@ try {
     $stmtRoom->execute([':id' => $roomId]);
     $room = $stmtRoom->fetch(PDO::FETCH_ASSOC);
 
+    if (!$room) {
+        throw new Exception("Invalid room selected.");
+    }
+
     $stmtSettings = $database->query("SELECT hotel_stars FROM settings WHERE id = 1");
     $stars = $stmtSettings->fetchColumn();
 
@@ -74,16 +78,23 @@ try {
     // Fetch and Calculate Features Cost
     $featuresCost = 0;
     $featuresDetails = [];
+    $featuresForReceipt = [];
 
     if (!empty($selectedFeatures)) {
         $selectedFeatures = array_map('intval', $selectedFeatures);
-        
-        // Create placeholders for SQL
         $placeholders = implode(',', array_fill(0, count($selectedFeatures), '?'));
+
+        $stmtFeatures = $database->prepare("
+            SELECT f.name, f.price, a.name AS activity_name, f.tier_name
+            FROM features f
+            JOIN activities a ON f.activity_id = a.id
+            WHERE f.id IN ($placeholders)
+        ");
         
-        $stmtFeatures = $database->prepare('SELECT id, name, price FROM features WHERE id IN (' . $placeholders . ')');
         $stmtFeatures->execute($selectedFeatures);
         $featuresDB = $stmtFeatures->fetchAll(PDO::FETCH_ASSOC);
+
+        $featuresForReceipt = [];
 
         foreach ($featuresDB as $feat) {
             $featuresCost += (int)$feat['price'];
@@ -91,10 +102,29 @@ try {
                 "name" => $feat['name'],
                 "cost" => (int)$feat['price']
             ];
+
+            $featuresForReceipt[] = [
+                "activity" => $feat['activity_name'],
+                "tier" => $feat['tier_name']
+            ];
         }
     }
 
     $totalCost = $roomCost + $featuresCost;
+
+    // Check for returning customer
+    $stmtCheckLoyalty = $database->prepare("SELECT COUNT(*) FROM bookings WHERE user_name = :user_name");
+    $stmtCheckLoyalty->execute([':user_name' => $userName]);
+    $previousBookings = $stmtCheckLoyalty->fetchColumn();
+
+    $stmtDiscount = $database->query("SELECT discount_percent FROM settings WHERE id = 1");
+    $discountPercent = $stmtDiscount->fetchColumn(); // e.g., 10
+    
+    $discount = 0;
+    if ($previousBookings > 0) {
+        $discount = $totalCost * ($discountPercent / 100);
+        $totalCost -= $discount;
+    }
 
     $client = new Client();
 
@@ -122,8 +152,8 @@ try {
 
     // If payment was successful, insert the booking into the database
     $stmtInsert = $database->prepare("
-        INSERT INTO bookings (room_id, user_name, arrival_date, departure_date, total_cost, transfer_code)
-        VALUES (:room_id, :user_name, :arrival_date, :departure_date, :total_cost, :transfer_code)
+        INSERT INTO bookings (room_id, user_name, arrival_date, departure_date, total_cost, transfer_code, discount_amount)
+        VALUES (:room_id, :user_name, :arrival_date, :departure_date, :total_cost, :transfer_code, :discount_amount)
     ");
 
     $stmtInsert->execute([
@@ -132,7 +162,8 @@ try {
         ':arrival_date' => $arrivalDate,
         ':departure_date' => $departureDate,
         ':total_cost' => $totalCost,
-        ':transfer_code' => $transferCode
+        ':transfer_code' => $transferCode,
+        ':discount_amount' => $discount
     ]);
 
     $bookingId = $database->lastInsertId();
@@ -152,12 +183,39 @@ try {
         }
     }
 
+    try {
+        $receiptResponse = $client->request('POST', 'https://www.yrgopelag.se/centralbank/receipt', [
+            'json' => [
+                'user' => $hotelUserName,
+                'api_key' => $apiKey,
+                'guest_name' => $userName,
+                'arrival_date' => $arrivalDate,
+                'departure_date' => $departureDate,
+                'features_used' => $featuresForReceipt ?? [],
+                'star_rating' => (int)$stars
+            ]
+        ]);
+
+        $receiptData = json_decode($receiptResponse->getBody()->getContents(), true);
+        $receiptStatus = "Sent to Bank";
+        
+    } catch (ClientException $e) {
+        // This will tell you exactly what the bank didn't like (e.g., "Duplicate receipt" or "Invalid dates")
+        $receiptStatus = "Bank rejected receipt: " . $e->getResponse()->getBody()->getContents();
+    } catch (Exception $e) {
+        $receiptStatus = "Connection error: " . $e->getMessage();
+    }
+
     // Return success response
     echo json_encode([
         'success' => true,
-        'message' => 'Booking confirmed!',
+        'message' => 'Booking and Receipt confirmed!',
         'bookingId' => $bookingId,
-        'totalCost' => $totalCost
+        'totalCost' => $totalCost,
+        'star_rating' => $stars,
+        'discountApplied' => $discount > 0 ? "You saved $$discount!" : "No discount applied",
+        'features' => $featuresForReceipt,
+        'receipt_status' => isset($receiptData) ? 'Sent to Bank' : 'Failed to send receipt',
     ]);
 
 } catch (Exception $e) {

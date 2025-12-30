@@ -26,19 +26,18 @@
         margin: 1rem 0;
     }
 
-    .header {
-        display: flex;
-        align-items: center; /* centers logo vertically to text+stars */
-        gap: 16px;
+    header {
+        background-color: var(--nav-color);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        /* display: flex;
+        align-items: center;
+        gap: 16px; */
+        width: 100%;
     }
 
     nav {
-        background-color: var(--nav-color);
-        /* background-image: url(/assets/images/hotel-images/hero-image_2.png); */
-        position: sticky;
-        top: 0;
-        overflow: hidden;
-        background-size: cover;
         display: flex;
         justify-content: space-between;
         align-items: center;

@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/assets/styles/app.css">
     <link rel="stylesheet" href="/assets/styles/calendar.css">
     <link rel="stylesheet" href="/assets/styles/booking.css">
+    <link rel="stylesheet" href="/assets/styles/food.css">
     <link rel="icon" href="/assets/images/favicon_64.png">
     <title>Yrgopelag</title>
 </head>

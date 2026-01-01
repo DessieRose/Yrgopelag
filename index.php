@@ -7,12 +7,10 @@ global $database;
 // Fetch the discount from settings
 $stmtSettings = $database->query("SELECT discount_percent FROM settings WHERE id = 1");
 $discountPercent = $stmtSettings->fetchColumn();
-
 ?>
 
-
 <div class="hero-img">
-    <img src="/assets/images/hotel-images/hero-image_2.png" alt="hero-img">
+    <img src="/assets/images/hotel-images/hero-image_3.png" alt="hero-img">
 </div>
     <section class="rooms">
         <div class="room">
@@ -49,20 +47,49 @@ $discountPercent = $stmtSettings->fetchColumn();
     
     <section class="dinner-plans">
         <h2 class="text-float">Dinner Plans</h2>
-        <img src="https://cdn.prod.website-files.com/62a1ad9e66ad7514469f0685/65ca12eaa3f9de8456ba4be5_blog-hero%20image-dining%20experience.jpg" alt="dinner-img">
+        <!-- <img src="https://cdn.prod.website-files.com/62a1ad9e66ad7514469f0685/65ca12eaa3f9de8456ba4be5_blog-hero%20image-dining%20experience.jpg" alt="dinner-img"> -->
+        <img src="/assets/images/hotel-images/restaurant.png" alt="">
     </section>
 
-    <section class="activities">
-        <h2 class="text-float">Activities</h2>
-        <img src="https://www.anglershotelmiami.com/images/1700-960/rpp_kimpton_ang_pool_deck_final-1-2-1bce4bc5.jpg" alt="activities">
+    <section class="restaurants">
+        <div class="restaurant-intro">
+            <h2>Culinary Experiences</h2>
+            <p class="peragraph">Indulge in our three world-class dining venues.</p>
+        </div>
+
+        <div class="restaurant-grid">
+            <div class="restaurant-card">
+                <div class="card-icon">🐟</div>
+                <h3>Azure Depths</h3>
+                <p class="cuisine-type">Fine Seafood & Champagne</p>
+                <p>Dive into a world of flavor. Our signature restaurant offers the freshest catch from the surrounding archipelago, served in an elegant glass-walled dining room overlooking the ocean.</p>
+            </div>
+
+            <div class="restaurant-card">
+                <div class="card-icon">🔥</div>
+                <h3>The Magma Grill</h3>
+                <p class="cuisine-type">Charcoal Steakhouse</p>
+                <p>Experience the heat. We cook our premium cuts on superheated volcanic stones right at your table. Rich flavors, smoky aromas, and the island's best wine cellar.</p>
+            </div>
+
+            <div class="restaurant-card">
+                <div class="card-icon">🥥</div>
+                <h3>Coco's Cabana</h3>
+                <p class="cuisine-type">Tropical Fusion & Bar</p>
+                <p>Kick off your shoes. Enjoy wood-fired pizzas, zesty fish tacos, and our famous coconut rum punch while watching the sun dip below the horizon.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="features-intro">
+        <a class="link-fetures-img" href="/app/src/booking.php">
+            <h2 class="text-float">Island Features</h2>
+            <!-- <img src="https://www.anglershotelmiami.com/images/1700-960/rpp_kimpton_ang_pool_deck_final-1-2-1bce4bc5.jpg" alt="activities"> -->
+            <img src="/assets/images/hotel-images/features.png" alt="">
+        </a>
     </section>
     
-
-
-
-
-
-
+    
 <?php require (__DIR__ . '/views/footer.php'); ?>
 
 

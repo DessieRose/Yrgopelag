@@ -25,3 +25,6 @@ $config = require __DIR__ . '/config.php';
 
 // Setup the database connection.
 $database = new PDO($config['database_path']);
+
+// // Determine the base URL dynamically
+// $baseUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]";

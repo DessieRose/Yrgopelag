@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // const nights = checkOut - checkIn;
             if (!arrival || !departure) return;
 
-            fetch('/app/src/functions.php', {
+            fetch('./app/src/functions.php', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json',},
                 body: JSON.stringify({

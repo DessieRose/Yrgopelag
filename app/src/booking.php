@@ -35,7 +35,7 @@ $selectedRoomId = $_GET['room_id'] ?? 1;
     <section class="booking-section">
         <h2>Book a room</h2>
 
-        <form action="/app/src/process_booking.php" method="POST" class="booking-form">
+        <form action="./app/src/process_booking.php" method="POST" class="booking-form">
             <div class="form-group">
                     <label for="user_name">Name (UserID):</label>
                     <input type="text" id="user_name" name="user_name" required placeholder="John">
@@ -60,12 +60,12 @@ $selectedRoomId = $_GET['room_id'] ?? 1;
                 <div class="date-inputs">
                     <div class="form-group">
                         <label for="arrival-<?= $selectedRoomId; ?>">Arrival Date (15:00)</label>
-                        <input type="date" id="arrival-<?= $roomId; ?>"name="arrival_date" required min="2026-01-01" max="2026-01-30">
+                        <input type="date" id="arrival-<?= $selectedRoomId; ?>" name="arrival_date" required min="2026-01-01" max="2026-01-30">
                     </div>
 
                     <div class="form-group">
-                        <label for="departure-<?= $roomId; ?>">Departure Date (11:00)</label>
-                        <input type="date" id="departure-<?= $roomId; ?>" name="departure_date" required min="2026-01-02" max="2026-01-31"> </div>
+                        <label for="departure-<?= $selectedRoomId; ?>">Departure Date (11:00)</label>
+                        <input type="date" id="departure-<?= $selectedRoomId; ?>" name="departure_date" required min="2026-01-02" max="2026-01-31">
                     </div>
                 </div>
 
@@ -99,13 +99,12 @@ $selectedRoomId = $_GET['room_id'] ?? 1;
                     <small>Simply use the same name you used for your previous stay.</small>
                 </div>
                 <div class="summary-box">
-                <div id="booking-summary">
-                    <p>Total Cost: <span id="display-total">$0</span></p>
+                    <div id="booking-summary">
+                        <p>Total Cost: <span id="display-total">$0</span></p>
+                    </div>
+                    <button type="submit" class="complete-button">Complete Booking</button>
                 </div>
-                <button type="submit" class="complete-button">Complete Booking</button>
-            </form>
-        </div>
-            
+        </form>    
     </section>
     
     <section class="rooms-booking">
@@ -123,7 +122,7 @@ $selectedRoomId = $_GET['room_id'] ?? 1;
                 <?php include __DIR__ . '/../../views/calendar.php'; ?>
             </div>
             <?php endforeach; ?>
-        </section>
+    </section>
 
 </main>
-        <?php require (__DIR__ . '/../../views/footer.php'); ?>
+<?php require (__DIR__ . '/../../views/footer.php'); ?>

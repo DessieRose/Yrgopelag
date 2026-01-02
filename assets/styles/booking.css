@@ -76,7 +76,7 @@
 
 /* Bottom Summary Box */
 .summary-box {
-    margin-top: 2rem;
+    margin-top: 1rem;
     padding: 1.5rem;
     background: var(--dark-blue);
     color: white;
@@ -136,4 +136,13 @@
     flex-wrap: wrap;
     gap: 2rem;
     /* margin-top: 2rem; */
+}
+
+.loyalty {
+    background-color: var(--pale-orange);
+    padding: 20px; 
+    text-align: center; 
+    margin: 20px 0;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
 }

@@ -183,6 +183,8 @@ try {
         }
     }
 
+    $receiptStatus = "Not sent yet";
+
     try {
         $receiptResponse = $client->request('POST', 'https://www.yrgopelag.se/centralbank/receipt', [
             'json' => [
@@ -200,10 +202,13 @@ try {
         $receiptStatus = "Sent to Bank";
         
     } catch (ClientException $e) {
-        // This will tell you exactly what the bank didn't like (e.g., "Duplicate receipt" or "Invalid dates")
-        $receiptStatus = "Bank rejected receipt: " . $e->getResponse()->getBody()->getContents();
+        // This catches 400 errors (Bad Request) from the bank
+        // It will print the EXACT reason the bank rejected it
+        $receiptStatus = "BANK ERROR: " . $e->getResponse()->getBody()->getContents();
+        
     } catch (Exception $e) {
-        $receiptStatus = "Connection error: " . $e->getMessage();
+        // This catches other connection errors
+        $receiptStatus = "CONNECTION ERROR: " . $e->getMessage();
     }
 
     // Return success response
@@ -215,7 +220,7 @@ try {
         'star_rating' => $stars,
         'discountApplied' => $discount > 0 ? "You saved $$discount!" : "No discount applied",
         'features' => $featuresForReceipt,
-        'receipt_status' => isset($receiptData) ? 'Sent to Bank' : 'Failed to send receipt',
+        'receipt_status' => $receiptStatus
     ]);
 
 } catch (Exception $e) {

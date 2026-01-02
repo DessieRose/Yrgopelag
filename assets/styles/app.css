@@ -97,7 +97,7 @@
     .hero-img img {
         top: 0;
         width: 100%;
-        height: 80vh; 
+        height: 70vh; 
         object-fit: cover;
     }
 
@@ -160,6 +160,10 @@
         /* border: 2px solid var(--nav-color);  */
         margin: 20px 0;
         box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .title {
+        top: 40%;
     }
 
     .link-fetures-img {

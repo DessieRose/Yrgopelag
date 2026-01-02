@@ -10,7 +10,8 @@ $discountPercent = $stmtSettings->fetchColumn();
 ?>
 
 <div class="hero-img">
-    <img src="/assets/images/hotel-images/hero-image_3.png" alt="hero-img">
+    <h2 class="text-float title">The Semicolon Sanctuary</h2>
+    <img src="/assets/images/hotel-images/hero-image_3_hero.png" alt="hero-img">
 </div>
     <section class="rooms">
         <div class="room">

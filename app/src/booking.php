@@ -5,8 +5,8 @@ require (__DIR__ . '/../../views/header.php');
 $stmtRooms = $database->query("SELECT * FROM rooms");
 $rooms = $stmtRooms->fetchAll(PDO::FETCH_ASSOC);
 
-// $stmtFeatures = $database->query("SELECT * FROM features WHERE active = 1");
-// $features = $stmtFeatures->fetchAll(PDO::FETCH_ASSOC);
+$stmtSettings = $database->query("SELECT discount_percent FROM settings WHERE id = 1");
+$discountPercent = $stmtSettings->fetchColumn();
 
 // Fetch active features and their activity names
 $query = "
@@ -94,13 +94,18 @@ $selectedRoomId = $_GET['room_id'] ?? 1;
                     <?php endforeach; ?>
                 </div>
 
+                <div class="loyalty">
+                    <p class="peragraph">Returning guests automatically receive a <br> <strong><?= $discountPercent; ?>% loyalty discount</strong> on their entire booking!</p>
+                    <small>Simply use the same name you used for your previous stay.</small>
+                </div>
                 <div class="summary-box">
                 <div id="booking-summary">
                     <p>Total Cost: <span id="display-total">$0</span></p>
                 </div>
                 <button type="submit" class="complete-button">Complete Booking</button>
-            </div>
-        </form>
+            </form>
+        </div>
+            
     </section>
     
     <section class="rooms-booking">

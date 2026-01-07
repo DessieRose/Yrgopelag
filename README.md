@@ -39,8 +39,8 @@ A dynamic, PHP-based hotel booking website for the fictional high-end resort **Y
 ## ⚙️ Installation & Setup
 ### 1. Clone the repository
 ```text
-git clone [https://github.com/YOUR_USERNAME/yrgopelag.git](https://github.com/YOUR_USERNAME/yrgopelag.git)
-cd yrgopelag
+git clone https://github.com/DessieRose/Yrgopelag.git
+cd Yrgopelag
 ```
 
 ### 2. Install Dependencies 

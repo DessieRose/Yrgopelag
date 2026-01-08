@@ -10,7 +10,6 @@ $bookedDays = $availability['booked_dates'];
 ?>
 
 <div class="room-booking-block" data-room-id="<?= $roomId; ?>">
-    <!-- <h4>Availability - January 2026</h4> -->
     
     <section class="calendar">
         <div class="day-label">Mon</div>

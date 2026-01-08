@@ -69,23 +69,10 @@ function calculateTotalCost(string $arrivalDate, string $departureDate, float $n
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    require_once __DIR__ . '/../../vendor/autoload.php';
-    require_once __DIR__ . '/autoload.php';
+    // Using the global $database connection that was set up in autoload.php
+    global $database;
+    
     header('Content-Type: application/json');
-
-    $input = file_get_contents('php://input');
-    $data = json_decode($input, true);
-
-    try {
-        $dbName = 'hotel.db'; // CHECK THIS NAME
-        $dbPath = __DIR__ . '/../database/' . $dbName; // Adjust path to where your .db file is
-        $pdo = new PDO("sqlite:$dbPath");
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    } catch (PDOException $e) {
-        // Send a JSON error back if connection fails
-        echo json_encode(['success' => false, 'error' => 'DB Connection failed']);
-        exit;
-    }
 
     // 2. Process the JSON input
     $header = $_SERVER['CONTENT_TYPE'] ?? '';
@@ -98,8 +85,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $arrivalDate = $data['arrival_date'];
             $departureDate = $data['departure_date'];
 
-            // Fetch room price using the local $pdo connection
-            $stmt = $pdo->prepare("SELECT price FROM rooms WHERE id = :id");
+            // Use the global $database connection
+            $stmt = $database->prepare("SELECT price FROM rooms WHERE id = :id");
             $stmt->execute(['id' => $roomId]);
             $room = $stmt->fetch(PDO::FETCH_ASSOC);
 

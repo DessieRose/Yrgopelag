@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmtSettings = $database->prepare("UPDATE settings SET hotel_stars = ?, discount_percent = ? WHERE id = 1");
         $stmtSettings->execute([$stars, $discount]);
 
-        // B. Update Room Prices
+        // Update Room Prices
         if (isset($_POST['room_prices'])) {
             foreach ($_POST['room_prices'] as $roomId => $price) {
                 $stmtRoom = $database->prepare("UPDATE rooms SET price = ? WHERE id = ?");
@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        // C. Update Features (Active Status)
+        // Update Features (Active Status)
         // First, set all to inactive (0), then strictly enable the checked ones
         $database->exec("UPDATE features SET active = 0");
 
@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// 2. Fetch Data to Display
+// Fetch Data to Display
 // Get Settings
 $stmtSettings = $database->query("SELECT * FROM settings WHERE id = 1");
 $settings = $stmtSettings->fetch(PDO::FETCH_ASSOC);

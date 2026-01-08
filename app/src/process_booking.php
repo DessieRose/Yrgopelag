@@ -104,10 +104,11 @@ try {
             ];
 
             $featuresForReceipt[] = [
-                "activity" => $feat['activity_name'],
-                "tier" => $feat['tier_name']
+                "activity" => strtolower(trim($feat['activity_name'])),
+                "tier" => strtolower(trim($feat['tier_name']))  
             ];
         }
+
     }
 
     $totalCost = $roomCost + $featuresCost;
@@ -151,36 +152,57 @@ try {
     }
 
     // If payment was successful, insert the booking into the database
-    $stmtInsert = $database->prepare("
-        INSERT INTO bookings (room_id, user_name, arrival_date, departure_date, total_cost, transfer_code, discount_amount)
-        VALUES (:room_id, :user_name, :arrival_date, :departure_date, :total_cost, :transfer_code, :discount_amount)
-    ");
-
-    $stmtInsert->execute([
-        ':room_id' => $roomId,
-        ':user_name' => $userName,
-        ':arrival_date' => $arrivalDate,
-        ':departure_date' => $departureDate,
-        ':total_cost' => $totalCost,
-        ':transfer_code' => $transferCode,
-        ':discount_amount' => $discount
-    ]);
-
-    $bookingId = $database->lastInsertId();
-
-    // Insert booking features if any
-    if (!empty($selectedFeatures)) {
-        $stmtBookingFeatures = $database->prepare("
-            INSERT INTO booking_features (booking_id, feature_id)
-            VALUES (:booking_id, :feature_id)
+    try {
+        $stmtInsert = $database->prepare("
+            INSERT INTO bookings (room_id, user_name, arrival_date, departure_date, total_cost, transfer_code, discount_amount)
+            VALUES (:room_id, :user_name, :arrival_date, :departure_date, :total_cost, :transfer_code, :discount_amount)
         ");
 
-        foreach ($selectedFeatures as $featureId) {
-            $stmtBookingFeatures->execute([
-                ':booking_id' => $bookingId,
-                ':feature_id' => (int)$featureId
-            ]);
+        $result = $stmtInsert->execute([
+            ':room_id' => $roomId,
+            ':user_name' => $userName,
+            ':arrival_date' => $arrivalDate,
+            ':departure_date' => $departureDate,
+            ':total_cost' => $totalCost,
+            ':transfer_code' => $transferCode,
+            ':discount_amount' => $discount
+        ]);
+
+        if (!$result) {
+            throw new Exception("Failed to insert booking into database");
         }
+
+        $bookingId = $database->lastInsertId();
+
+        if (!$bookingId) {
+            throw new Exception("Could not retrieve booking ID from database");
+        }
+
+        // Insert booking features if any
+        if (!empty($selectedFeatures)) {
+            $stmtBookingFeatures = $database->prepare("
+                INSERT INTO booking_features (booking_id, feature_id)
+                VALUES (:booking_id, :feature_id)
+            ");
+
+            foreach ($selectedFeatures as $featureId) {
+                $stmtBookingFeatures->execute([
+                    ':booking_id' => $bookingId,
+                    ':feature_id' => (int)$featureId
+                ]);
+            }
+        }
+
+    } catch (PDOException $e) {
+        // Database error occurred
+        error_log("Database error during booking insertion: " . $e->getMessage());
+        echo json_encode(['error' => 'Database error: Failed to save booking. ' . $e->getMessage()]);
+        exit;
+    } catch (Exception $e) {
+        // Other error occurred
+        error_log("Error during booking insertion: " . $e->getMessage());
+        echo json_encode(['error' => 'Error saving booking: ' . $e->getMessage()]);
+        exit;
     }
 
     $receiptStatus = "Not sent yet";
@@ -201,10 +223,10 @@ try {
         $receiptData = json_decode($receiptResponse->getBody()->getContents(), true);
         $receiptStatus = "Sent to Bank";
         
-    } catch (ClientException $e) {
-        // This catches 400 errors (Bad Request) from the bank
-        // It will print the EXACT reason the bank rejected it
-        $receiptStatus = "BANK ERROR: " . $e->getResponse()->getBody()->getContents();
+    // } catch (ClientException $e) {
+    //     // This catches 400 errors (Bad Request) from the bank
+    //     // It will print the EXACT reason the bank rejected it
+    //     $receiptStatus = "BANK ERROR: " . $e->getResponse()->getBody()->getContents();
         
     } catch (Exception $e) {
         // This catches other connection errors

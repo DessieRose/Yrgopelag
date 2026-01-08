@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
         function calculatePrice() {
             const arrival = arrivalInput.value;
             const departure = departureInput.value;
-            // const nights = checkOut - checkIn;
+            
             if (!arrival || !departure) return;
 
             fetch('./app/src/functions.php', {
@@ -46,14 +46,6 @@ document.addEventListener('DOMContentLoaded', () => {
         arrivalInput.addEventListener('change', calculatePrice);
         departureInput.addEventListener('change', calculatePrice);
 
-        // function draw() {
-        //     grid.querySelectorAll('.day:not(.empty)').forEach((div, index) => {
-        //         const d = index + 1;
-        //         div.className = 'day';
-        //         if (d === start || d === end) div.classList.add('selected');
-        //         if (d > start && d < end) div.classList.add('range');
-        //     });
-        // }
     });
 
 });

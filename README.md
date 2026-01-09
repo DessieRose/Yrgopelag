@@ -87,3 +87,13 @@ This project communicates with the **Yrgopelag Central Bank**.
 * Endpoint: POST https://www.yrgopelag.se/centralbank/receipt
 
 * **Logic:** When a booking is confirmed locally, a request is sent to the bank. The bank validates the guest name, dates, and feature tiers (basic, standard, premium) before issuing a transaction ID.
+
+
+## Code review:
+- functions.php:10 Nice function (getRoomAvailability) with descriptive name. But instead of having one large function, maybe you could consider to create a separate function for "Fetch all bookings for the room in January 2026" and nest it in to make the code cleaner?
+-  functions.php:61 The same with the function calculateTotalCost. Consider to create a separate function for "// Use the global $database connection"?
+-  login.php:25 Great login file! Maybe row 24-32 could be moved to a view file instead, which requires in the login logics, and letting the app files only handle the logics?
+-  process_booking.php:23 Nice use of try and catch to handle errors and prevent database registration if the booking fails. But instead of a single large try, you could consider using a session variable for error, redirect user to booking form with header(Location...), then use exit or die to stop the script?
+-  process_booking.php:25 Is it neccessary to use htmlspecialchars on input data before inserting it into database? I've learned during project that data inserted into database shouldn't get sanitized before. Instead it should get sanitized on output/when you fetch data from database and render it out in HTML.
+-  index.php:16 Great room presentation with supernice color scheme! Maybe you could use a foreach loop to present rooms? To make it more dynamic if rooms are added or closed? This would also make your code more DRY.
+-  index.php:17-25-33-60: Minor thing, what about using <article> instead of <div>? 

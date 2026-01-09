@@ -8,7 +8,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 }
 
 require (__DIR__ . '/autoload.php');
-require (__DIR__ . '/../../views/header.php'); 
+require (__DIR__ . '/../../views/header.php');
 
 // Handle Form Submission (POST)
 $message = "";

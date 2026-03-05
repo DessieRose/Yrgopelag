@@ -2,7 +2,6 @@
 .booking-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    /* grid-template-rows: 12px 12px 12px; */
     max-width: 90%;
     margin: 3rem auto;
     padding: 2rem;
@@ -16,6 +15,7 @@
     color: var(--dark-blue);
     margin-bottom: 2rem;
     text-align: center;
+    grid-column: 1 / -1;
 }
 
 .form-group {
@@ -53,6 +53,7 @@
     background: white;
     border-radius: 8px;
     border: 1px solid #e0e0e0;
+    grid-column: 1 / -1;
 }
 
 .features-selection h3 {
@@ -84,6 +85,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    grid-column: 1 / -1;
 }
 
 #booking-summary p {
@@ -132,10 +134,15 @@
 
 .rooms-booking {
     display: grid;
-    justify-content: space-evenly;
-    flex-wrap: wrap;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2rem;
-    /* margin-top: 2rem; */
+    padding: 0 1rem;
+}
+
+.rooms-booking h2 {
+    grid-column: 1 / -1;
+    color: var(--dark-blue);
+    text-align: center;
 }
 
 .loyalty {
@@ -145,4 +152,62 @@
     margin: 20px 0;
     box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
     border-radius: 6px;
+    grid-column: 1 / -1;
+}
+
+/* --- Mobile Styles --- */
+@media (max-width: 768px) {
+    .booking-container {
+        display: block; /* Forces everything to stack vertically */
+        width: 95%;
+        padding: 1rem;
+    }
+
+    .date-inputs {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .summary-box {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .rooms-booking {
+        display: flex;
+        flex-direction: column; /* Stack room types vertically */
+        padding: 0;
+        gap: 1rem;
+    }
+
+    .room {
+        width: 100%; /* Take up full width of the screen */
+        margin: 1rem 0; /* Remove side margins that cause horizontal scrolling */
+        padding: 1.5rem 1rem; /* Dramatically reduce desktop padding */
+        border-radius: 1rem;
+    }
+
+    .calendar {
+        max-width: 100%; /* Let it scale down */
+        gap: 2px; /* Tighter gap for small screens */
+    }
+
+    .day, .day-label {
+        font-size: 0.75rem; /* Slightly smaller text to fit 7 columns */
+        border-radius: 4px;
+    }
+
+    .feature-item {
+        margin-left: 0.5rem; /* Reduce desktop indentation */
+        font-size: 0.9rem;
+    }
+
+    /* 4. Loyalty Box */
+    .loyalty {
+        width: 100%;
+        margin: 10px 0;
+        padding: 15px;
+    }
+    
 }

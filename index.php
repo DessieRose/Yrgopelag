@@ -1,23 +1,36 @@
 <?php 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+// FIRST: Load all PHP dependencies and start session BEFORE any HTML output
 require (__DIR__ . '/vendor/autoload.php');
 require (__DIR__ . '/app/src/autoload.php');
-require (__DIR__ . '/views/header.php'); 
+
+// Start session before any output
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 global $database;
 
 // Fetch the discount from settings
 $stmtSettings = $database->query("SELECT discount_percent FROM settings WHERE id = 1");
 $discountPercent = $stmtSettings->fetchColumn();
+
+// THEN: Include the header HTML
+require (__DIR__ . '/views/header.php');
 ?>
 
 <div class="hero-img">
     <h2 class="text-float title">The Semicolon Sanctuary</h2>
-    <img src="./assets/images/hotel-images/hero-image_5.png" alt="hero-img">
+    <img src="/yrgopelag/assets/images/hotel-images/hero-image_5.jpg" alt="hero-img">
 </div>
     <section class="rooms">
         <div class="room">
             <h3>Budget</h3>
             <p>The Cave</p>
-            <img src="./assets/images/hotel-images/rooms/room_budget.png" alt="budget-room">
+            <img src="/yrgopelag/assets/images/hotel-images/rooms/room_budget.jpg" alt="budget-room">
             <?php $roomId = 1; // Budget Room
             include 'views/calendar.php'; ?>
             <a class="book-button" href="./app/src/booking.php?room_id=<?= $roomId; ?>" class="btn">Book Now</a>
@@ -25,7 +38,7 @@ $discountPercent = $stmtSettings->fetchColumn();
         <div class="room">
             <h3>Standard</h3>
             <p>The Bungalow</p>
-            <img src="./assets/images/hotel-images/rooms/room_standard.png" alt="standard-room">
+            <img src="/yrgopelag/assets/images/hotel-images/rooms/room_standard.jpg" alt="standard-room">
             <?php $roomId = 2; // Standard Room
             include 'views/calendar.php'; ?>
             <a class="book-button" href="./app/src/booking.php?room_id=<?= $roomId; ?>" class="btn">Book Now</a>
@@ -33,7 +46,7 @@ $discountPercent = $stmtSettings->fetchColumn();
         <div class="room">
             <h3>Luxury</h3>
             <p>The Volcano Suite</p>
-            <img src="./assets/images/hotel-images/rooms/room_luxury.png" alt="luxery-room">
+            <img src="/yrgopelag/assets/images/hotel-images/rooms/room_luxury.jpg" alt="luxery-room">
             <?php $roomId = 3; // Luxury Room
             include 'views/calendar.php'; ?>
             <a class="book-button" href="./app/src/booking.php?room_id=<?= $roomId; ?>" class="btn">Book Now</a>
@@ -48,7 +61,7 @@ $discountPercent = $stmtSettings->fetchColumn();
     
     <section class="dinner-plans">
         <h2 class="text-float">Dinner Plans</h2>
-        <img src="./assets/images/hotel-images/restaurant.png" alt="">
+        <img src="/yrgopelag/assets/images/hotel-images/restaurant.jpg" alt="">
     </section>
 
     <section class="restaurants">
@@ -83,8 +96,8 @@ $discountPercent = $stmtSettings->fetchColumn();
 
     <section class="features-intro">
         <a class="link-fetures-img" href="./app/src/booking.php">
-            <h2 class="text-float">Island Features</h2>
-            <img src="./assets/images/hotel-images/features.png" alt="">
+            <h2 class="text-float">Dinner Plans</h2>
+            <img src="/yrgopelag/assets/images/hotel-images/features.jpg" alt="">
         </a>
     </section>
     
